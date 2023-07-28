@@ -2,4 +2,6 @@
 # a bash script that stops the infinity task
 # using kill
 
-kill "$(pgrep -f 4-to-infinity_and_beyond)"
+task4=kill "$(pgrep -f 4-to-infinity_and_beyond)"
+
+kill -TERM "$task4"
