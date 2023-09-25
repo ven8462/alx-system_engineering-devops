@@ -4,5 +4,5 @@
 sudo apt-get update
 sudo apt-get -y install nginx
 sudo ufw allow '54.210.38.181'
-sudo echo "Hello, world!" | sudo tee /var/www/html/index.html
+echo "Hello, world!" > /var/www/html/index.nginx-debian.html
 sudo service nginx restart
