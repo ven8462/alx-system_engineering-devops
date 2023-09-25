@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # Install nginx on my web-01 web server
 
-sudo apt-get update
-sudo apt-get -y install nginx
-sudo ufw allow '54.210.38.181'
+apt-get update
+apt-get -y install nginx
+ufw allow '54.210.38.181'
 echo "Hello, world!" > /var/www/html/index.nginx-debian.html
-sudo service nginx restart
+service nginx restart
