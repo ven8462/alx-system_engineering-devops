@@ -1,19 +1,13 @@
 #!/usr/bin/env bash
-# Automating nginx configuration
+# Configure Nginx so that its HTTP response contains a custom header (on web-01 and web-02)
 
-apt-get update
+# Update and install Nginx
+apt-get -y update
 apt-get -y install nginx
 ufw allow 'Nginx HTTP'
-
-# adding the custom header
-sudo sed -i "/http {/a\         add_header X-Served-By $HOSTNAME;" /etc/nginx/nginx.conf
-
+echo "Hello World!" > /var/www/html/index.nginx-debian.html
+echo "Ceci n'est pas une page" > /var/www/html/404.html
+sudo sed -i '/listen 80 default_server/a rewrite ^/redirect_me https://intranet.alxswe.com/ permanent;' /etc/nginx/sites-available/default
+sudo sed -i '/listen 80 default_server/a error_page 404 /404.html;' /etc/nginx/sites-enabled/default
+sudo sed -i "/listen 80 default_server/a add_header X-Served-By $HOSTNAME;" /etc/nginx/sites-enabled/default
 sudo service nginx restart
-
-# Install nginx on my web-01 web server
-
-# apt-get update
-# apt-get -y install nginx
-# ufw allow 'Nginx HTTP'
-# echo "Hello World!" > /var/www/html/index.nginx-debian.html
-# service nginx start
