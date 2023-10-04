@@ -2,16 +2,10 @@
 # Configure a new Nginx server to have a custom 404 page.
 
 # Update and install Nginx
-sudo apt-get -y update
-sudo apt-get -y install nginx
-
-# Create the custom 404 page
-echo "Ceci n'est pas une page" | sudo tee /var/www/html/404.html
-
-# Configure Nginx for custom 404 error page
-new_string="error_page 404 /404.html;\n\tlocation = /404.html {\n\t\troot /var/www/html;\n\t\tinternal;\n\t}"
-
-sudo sed -i "/error_page 404 /a $new_string" /etc/nginx/sites-available/default
-
-# Restart Nginx
+apt-get update
+apt-get -y install nginx
+ufw allow 'Nginx HTTP'
+echo "Hello World!" > /var/www/html/index.nginx-debian.html
+sed -i '/listen 80 default_server/a rewrite ^/redirect_me https://intranet.alxswe.com/ permanent;' /etc/nginx/sites-available/default
+sed -i '/listen 80 default_server/a error_page 404 /404.html;' /etc/nginx/sites-available/default
 sudo service nginx restart

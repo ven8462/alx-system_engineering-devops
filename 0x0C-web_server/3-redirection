@@ -7,4 +7,5 @@ apt-get -y install nginx
 ufw allow 'Nginx HTTP'
 echo "Hello World!" > /var/www/html/index.nginx-debian.html
 sed -i '/listen 80 default_server/a rewrite ^/redirect_me https://intranet.alxswe.com/ permanent;' /etc/nginx/sites-available/default
+sed -i '/listen 80 default_server/a error_page 404 /404.html;' /etc/nginx/sites-available/default
 sudo service nginx restart
