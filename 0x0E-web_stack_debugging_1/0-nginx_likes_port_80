@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# use port 80 for nginx
+
+# Store the filename in a variable
+file="/etc/nginx/sites-enabled/default"
+
+# Use sed to perform the replacement
+sed -i 's/[0-9]\+ default_server/80 default_server/' "$file"
+
+# restart the service
+sudo service nginx restart
