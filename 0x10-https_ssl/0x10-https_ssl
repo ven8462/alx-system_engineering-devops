@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
-# dig domain names
+# Takes 'domain' and 'subdomain' parameters and displays information for the specified subdomain
 
-sprinter () {
-	script=$(dig "${2}.${1}" | grep -A1 'ANSWER SECTION:' | tr '\t' '\n' | tail -2 | tr '\n' ' ')
-	echo "${2} $script" | awk '{print "The subdomain " \$1 " is a " \$2 " record and points to " \$3}'
+print_info () {
+	script=$(dig "$2"."$1" | grep -A1 'ANSWER SECTION:' | tr '\t' '\n' | tail -2 | tr '\n' ' ')
+	echo "$2 $script" | awk '{print "The subdomain " $1 " is a " $2 " record and points to " $3}'
 }
 
 if [ "$#" -eq 2 ]; then
-	sprinter "\$1" "\$2"
+	print_info "$1" "$2"
 else
-	subs=("www" "lb-01" "web-01" "web-02")
-	for domain in "${subs[@]}"; do
-		sprinter "\$1" "$domain"
+	subdomains=("www" "lb-01" "web-01" "web-02")
+	for subdomain in "${subdomains[@]}"; do
+		print_info "$1" "$subdomain"
 	done
 fi
