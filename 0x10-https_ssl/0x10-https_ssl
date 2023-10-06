@@ -2,16 +2,15 @@
 # dig domain names
 
 sprinter () {
-	script=$(dig "$2"."$1" | grep -A1 'ANSWER SECTION:' | tr '\t' '\n' | tail -2 | tr '\n' ' ')
-	echo "$2 $script" | awk '{print "The subdomain " $1 " is a " $2 " record and points to " $3}'
+	script=$(dig "${2}.${1}" | grep -A1 'ANSWER SECTION:' | tr '\t' '\n' | tail -2 | tr '\n' ' ')
+	echo "${2} $script" | awk '{print "The subdomain " \$1 " is a " \$2 " record and points to " \$3}'
 }
 
-
 if [ "$#" -eq 2 ]; then
-	sprinter "$1" "$2"
+	sprinter "\$1" "\$2"
 else
 	subs=("www" "lb-01" "web-01" "web-02")
 	for domain in "${subs[@]}"; do
-		sprinter "$1" "$domain"
+		sprinter "\$1" "$domain"
 	done
 fi
