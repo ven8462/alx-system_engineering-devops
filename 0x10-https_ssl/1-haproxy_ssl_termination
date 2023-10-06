@@ -41,11 +41,11 @@ defaults
 
 frontend myfrontend
         bind *:80
-        bind *:443 ssl crt /etc/haproxy/certs/www.lavenderanyango.tech.pem
-        # redirect scheme https code 301 if !{ ssl_fc }
-        default_backend my_servers
-backend my_servers
+        bind *:443 ssl crt /etc/haproxy/certs/ssllavenderanyango.tech.pem
+        redirect scheme https code 301 if !{ ssl_fc }
+        mode http
+    default_backend webservers
+backend webservers
         balance roundrobin
     server 251668-web-01 100.25.133.244:80 check
     server 251668-web-02 100.26.132.163:80 check
-    
