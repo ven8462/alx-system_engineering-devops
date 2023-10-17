@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+#Fixes a web server to run nginx as the nginx user listening to port 8080
+
+# Change the user in the Nginx configuration file to "nginx"
+sed -i "s/#user www-data/user nginx/" /etc/nginx/nginx.conf
+
+# Change the default port from 80 to 8080 in the Nginx configuration file
+sed -i "s/80/8080/g" /etc/nginx/sites-available/default
+
+# Set the correct permissions for the Nginx configuration file
+chmod 644 /etc/nginx/nginx.conf
+
+# Stop any running Apache processes
+pkill apache2
+
+# Start Nginx as the nginx user
+sudo -u nginx service nginx start
