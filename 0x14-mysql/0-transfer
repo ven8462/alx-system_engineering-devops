@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+if [ $# -ne 2 ]
+then
+	echo "Usage: seccp PATH_TO_FILE WEB_SERVER"
+else
+	PATH_TO_FILE="$1"
+	WEB_SERVER="$2"
+
+	scp -o StrictHostKeyChecking=no "$PATH_TO_FILE" "$WEB_SERVER":~/
+fi
