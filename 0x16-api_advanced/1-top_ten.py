@@ -11,7 +11,7 @@ def top_ten(subreddit):
     """
     url = 'https://www.reddit.com/r/{}/hot.json'.format(subreddit)
     headers = {
-        'User-Agent':'My User Agent 2'
+        'User-Agent': 'My User Agent 2'
     }
     response = get(url, headers=headers, allow_redirects=False)
     reddits = response.json()
@@ -20,5 +20,5 @@ def top_ten(subreddit):
         children = reddits.get('data').get('children')
         for i in range(10):
             print(children[i].get('data').get('title'))
-    except:
+    except Exception:
         print('None')
