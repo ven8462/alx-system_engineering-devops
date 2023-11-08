@@ -8,35 +8,36 @@ for a given subreddit
 import requests
 
 
-def recurse(subreddit, hot_list=[], after=None):
-    """
-    a recursive function that queries the Reddit API
-and returns a list containing the titles of all hot articles
-for a given subreddit
-"""
-    url = f"https://www.reddit.com/r/{subreddit}/hot.json"
+def count_words(subreddit, word_list, after=None, counts=None):
+    """the module"""
+    if counts is None:
+        counts = {}
+
+    if after is None:
+        url = f"https://www.reddit.com/r/{subreddit}/hot.json?limit=100"
+    else:
+        url = f"https://www.reddit.com/r/{subreddit}/hot.json?limit=100&after={after}"
+
     headers = {
-        "User-Agent": "My User Agent 3"
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+        "Accept": "application/json"
     }
 
-    if after is not None:
-        url += f"?after={after}"
-
     response = requests.get(url, headers=headers)
+    data = response.json()
 
-    if response.status_code == 200:
-        data = response.json().get("data", {})
+    articles = data["data"]["children"]
+    titles = [article["data"]["title"].lower() for article in articles]
 
-        if "children" not in data:
-            return None
+    for title in titles:
+        for word in word_list:
+            if word.lower() in title:
+                counts[word.lower()] = counts.get(word.lower(), 0) + 1
 
-        hot_list.append(item["data"]["title"] for item in data["children"])
-
-        after = data.get("after")
-
-        if after is None:
-            return hot_list
-        else:
-            return recurse(subreddit, hot_list, after)
+    after = data["data"]["after"]
+    if after is not None:
+        count_words(subreddit, word_list, after, counts)
     else:
-        return None
+        sorted_counts = sorted(counts.items(), key=lambda x: (-x[1], x[0]))
+        for word, count in sorted_counts:
+            print(f"{word}: {count}")
