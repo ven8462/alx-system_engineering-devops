@@ -43,9 +43,20 @@ server {
                 proxy_pass http://localhost:5000/airbnb-onepage/;
         }
 
-        location /airbnb-dynamic/number_odd_or_even/ {
-                rewrite ^/airbnb-dynamic/number_odd_or_even/(.*)$ /\$1 break;
-                proxy_pass http://localhost:5001;
+
+        location ~ ^/airbnb-dynamic/number_odd_or_even/(\d+)$ {
+                include proxy_params;
+                proxy_pass http://127.0.0.1:5001/number_odd_or_even/$1;
+                proxy_set_header Host $host;
+                proxy_set_header X-Original-URI $request_uri;
+                proxy_set_header X-Original-Host $host;
+                proxy_set_header X-Original-Port $server_port;
+        }
+
+
+        location ~ ^/api/(?<endpoint>.+)$ {
+                proxy_pass http://127.0.0.1:5002/api/$endpoint;
+                include proxy_params;
         }
 
         location / {
@@ -90,4 +101,4 @@ server {
 #       location / {
 #               try_files $uri $uri/ =404;
 #       }
-#
+#}
